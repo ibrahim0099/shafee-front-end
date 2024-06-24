@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 const URL_LOCAL = 'http://localhost:4000';
 const URL_SERVER = 'https://shafee-backend-deploy.vercel.app/'
 
-const socket = io(URL_LOCAL, {
+const socket = io(URL_SERVER, {
   reconnection: true,
   reconnectionAttempts: Infinity,
   reconnectionDelay: 1000,
