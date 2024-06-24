@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 
-const socket = io('ws://localhost:4000', {
+const socket = io('wss://shafee-backend-deploy-hxgc1c015-ibrahim009ps-projects.vercel.app', {
   reconnection: true,
   reconnectionAttempts: Infinity,
   reconnectionDelay: 1000,
