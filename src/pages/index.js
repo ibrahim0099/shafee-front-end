@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 
-const socket = io('wss://shafee-backend-deploy-hxgc1c015-ibrahim009ps-projects.vercel.app', {
+const URL_LOCAL = 'http://localhost:4000';
+const URL_SERVER = 'https://shafee-backend-deploy.vercel.app/'
+
+const socket = io(URL_LOCAL, {
   reconnection: true,
   reconnectionAttempts: Infinity,
   reconnectionDelay: 1000,
@@ -12,6 +15,7 @@ const socket = io('wss://shafee-backend-deploy-hxgc1c015-ibrahim009ps-projects.v
 export default function Home() {
   const [tradeDetails, setTradeDetails] = useState(null);
   const [status, setStatus] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     socket.on('connect', () => {
@@ -19,6 +23,7 @@ export default function Home() {
     });
 
     socket.on('tradeDetails', (data) => {
+      setLoading(false);
       setTradeDetails(data);
     });
 
@@ -43,6 +48,7 @@ export default function Home() {
 
   const handleTrade = () => {
     setStatus('Get Master Trade...');
+    setLoading(true);
     socket.emit('trade');
   };
 
@@ -52,10 +58,16 @@ export default function Home() {
       <button 
         onClick={handleTrade} 
         className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+        disabled={loading}
       >
-        Trade
+        {loading ? 'Processing...' : 'Trade'}
       </button>
       <p className="mt-4 text-lg">{status}</p>
+      {loading && (
+        <div className="mt-4">
+          <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full text-blue-500"></div>
+        </div>
+      )}
       {tradeDetails && (
         <div className="mt-6 p-4 bg-white shadow-md rounded-lg">
           <h2 className="text-2xl font-semibold mb-2">Trade Details</h2>
